@@ -1,23 +1,33 @@
 # File Translator / Mirror Info
 
-Small static web app for working with text files: upload a file, view its metadata, mirror the text, and download the result.
+A polished static web app for text processing and file output.
 
-## Features
-- upload `.txt`, `.md`, `.json`, `.csv` and other text-based files
-- display file name, size, type, extension, and text stats
-- quick text actions: mirror, uppercase, lowercase, remove extra spaces
-- download processed content in `.txt` format
+## New in version 2
+- improved dark UI
+- more text transformation tools
+- live statistics for characters, words, and lines
+- copy/download output
+- better metadata display for uploaded files
 
 ## Run locally
-Open `index.html` in a browser, or serve the folder with any static file server:
+Open `index.html` directly in a browser, or use:
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open http://localhost:8000
+Then visit http://localhost:8000
+
+## Included features
+- upload text files
+- view file info
+- mirror text
+- reverse words and lines
+- uppercase/lowercase/title case
+- remove duplicate lines and extra spaces
+- copy or download the result
 
 ## Files
-- `index.html` — application layout
-- `styles.css` — styling
-- `app.js` — logic for file handling and text operations
+- `index.html` — app layout
+- `styles.css` — visual design
+- `app.js` — application logic

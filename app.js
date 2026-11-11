@@ -1,49 +1,46 @@
 const fileInput = document.getElementById('fileInput');
 const sourceText = document.getElementById('sourceText');
 const outputText = document.getElementById('outputText');
-const fileName = document.getElementById('fileName');
-const mimeType = document.getElementById('mimeType');
-const fileSize = document.getElementById('fileSize');
-const fileExt = document.getElementById('fileExt');
-const charCount = document.getElementById('charCount');
-const wordCount = document.getElementById('wordCount');
 
-const resetButton = document.getElementById('resetButton');
-const mirrorBtn = document.getElementById('mirrorBtn');
-const upperBtn = document.getElementById('upperBtn');
-const lowerBtn = document.getElementById('lowerBtn');
-const trimBtn = document.getElementById('trimBtn');
+const fileNameEl = document.getElementById('fileName');
+const mimeTypeEl = document.getElementById('mimeType');
+const fileSizeEl = document.getElementById('fileSize');
+const fileExtEl = document.getElementById('fileExt');
+const charCountEl = document.getElementById('charCount');
+const wordCountEl = document.getElementById('wordCount');
+const lineCountEl = document.getElementById('lineCount');
+const resetBtn = document.getElementById('resetBtn');
+const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-
-function updateStats(value) {
-  const text = value ?? '';
-  charCount.textContent = String(text.length);
-  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  wordCount.textContent = String(words);
-}
-
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(String(reader.result ?? ''));
-    reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
-    reader.readAsText(file);
-  });
-}
+const statusPill = document.getElementById('statusPill');
 
 function formatBytes(bytes) {
   if (!bytes) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB'];
   const i = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-  const value = bytes / 1024 ** i;
+  const value = bytes / (1024 ** i);
   return `${value.toFixed(value >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
 }
 
-function getFileExtension(name) {
+function getFileExt(name) {
   if (!name) return '—';
   const parts = name.split('.');
-  return parts.length > 1 ? parts.pop().toUpperCase() : '—';
+  return parts.length > 1 ? parts[parts.length - 1].toUpperCase() : '—';
+}
+
+function updateStats(rawText) {
+  const text = rawText ?? '';
+  const characters = text.length;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const lines = text ? text.split(/\r?\n/).length : 0;
+
+  charCountEl.textContent = String(characters);
+  wordCountEl.textContent = String(words);
+  lineCountEl.textContent = String(lines);
+}
+
+function setStatus(text) {
+  statusPill.textContent = text;
 }
 
 function mirrorText(value) {
@@ -54,76 +51,172 @@ function mirrorText(value) {
     .join('\n');
 }
 
-async function handleFileInput(event) {
+function reverseWords(value) {
+  return value
+    .split(/\s+/)
+    .map((word) => [...word].reverse().join(''))
+    .join(' ');
+}
+
+function titleCase(value) {
+  return value
+    .toLowerCase()
+    .replace(/(^|\s)([a-zа-яё])/g, (_, prefix, char) => prefix + char.toUpperCase());
+}
+
+function trimWhitespace(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function sortLines(value) {
+  return value
+    .split(/\r?\n/)
+    .sort((a, b) => a.localeCompare(b))
+    .join('\n');
+}
+
+function uniqueLines(value) {
+  const items = value.split(/\r?\n/);
+  const seen = new Set();
+  const result = [];
+
+  for (const item of items) {
+    if (!seen.has(item)) {
+      seen.add(item);
+      result.push(item);
+    }
+  }
+
+  return result.join('\n');
+}
+
+function applyTransformation(type) {
+  const current = sourceText.value;
+
+  let result = current;
+
+  switch (type) {
+    case 'mirror':
+      result = mirrorText(current);
+      break;
+    case 'reverseWords':
+      result = reverseWords(current);
+      break;
+    case 'upper':
+      result = current.toUpperCase();
+      break;
+    case 'lower':
+      result = current.toLowerCase();
+      break;
+    case 'title':
+      result = titleCase(current);
+      break;
+    case 'trim':
+      result = trimWhitespace(current);
+      break;
+    case 'sort':
+      result = sortLines(current);
+      break;
+    case 'unique':
+      result = uniqueLines(current);
+      break;
+    default:
+      break;
+  }
+
+  outputText.value = result;
+  updateStats(result);
+  setStatus('Обработано');
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result ?? ''));
+    reader.onerror = () => reject(new Error('Ошибка чтения файла'));
+    reader.readAsText(file);
+  });
+}
+
+async function handleFileSelect(event) {
   const [file] = event.target.files;
   if (!file) return;
 
-  const text = await readFileAsText(file);
-  sourceText.value = text;
-  outputText.value = text;
-  updateStats(text);
+  try {
+    const content = await readFileAsText(file);
+    sourceText.value = content;
+    outputText.value = content;
+    updateStats(content);
 
-  fileName.textContent = file.name;
-  mimeType.textContent = file.type || 'text/plain';
-  fileSize.textContent = formatBytes(file.size);
-  fileExt.textContent = getFileExtension(file.name);
+    fileNameEl.textContent = file.name;
+    mimeTypeEl.textContent = file.type || 'text/plain';
+    fileSizeEl.textContent = formatBytes(file.size);
+    fileExtEl.textContent = getFileExt(file.name);
+    setStatus('Файл загружен');
+  } catch (error) {
+    console.error(error);
+    setStatus('Ошибка');
+  }
 }
 
-function applyTransform(fn) {
-  const value = sourceText.value;
-  const result = fn(value);
-  outputText.value = result;
-  updateStats(result);
-}
-
-mirrorBtn.addEventListener('click', () => {
-  applyTransform(mirrorText);
-});
-
-upperBtn.addEventListener('click', () => {
-  applyTransform((value) => value.toUpperCase());
-});
-
-lowerBtn.addEventListener('click', () => {
-  applyTransform((value) => value.toLowerCase());
-});
-
-trimBtn.addEventListener('click', () => {
-  applyTransform((value) => value.replace(/\s+/g, ' ').trim());
-});
-
-resetButton.addEventListener('click', () => {
+function resetAll() {
   fileInput.value = '';
   sourceText.value = '';
   outputText.value = '';
-  fileName.textContent = '—';
-  mimeType.textContent = '—';
-  fileSize.textContent = '—';
-  fileExt.textContent = '—';
+  fileNameEl.textContent = '—';
+  mimeTypeEl.textContent = '—';
+  fileSizeEl.textContent = '—';
+  fileExtEl.textContent = '—';
   updateStats('');
-});
+  setStatus('Готово');
+}
 
-downloadBtn.addEventListener('click', () => {
-  const result = outputText.value || sourceText.value;
-  if (!result) return;
+async function copyOutput() {
+  const text = outputText.value || sourceText.value;
+  if (!text) return;
 
-  const blob = new Blob([result], { type: 'text/plain;charset=utf-8' });
+  try {
+    await navigator.clipboard.writeText(text);
+    setStatus('Скопировано');
+  } catch (error) {
+    console.error(error);
+    setStatus('Не удалось скопировать');
+  }
+}
+
+function downloadOutput() {
+  const text = outputText.value || sourceText.value;
+  if (!text) return;
+
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
 
+  const baseName = fileNameEl.textContent !== '—' ? fileNameEl.textContent.replace(/\.[^.]+$/, '') : 'mirror-output';
   link.href = url;
-  link.download = (fileName.textContent === '—' ? 'mirror-output' : fileName.textContent.replace(/\.[^.]+$/, '')) + '.txt';
+  link.download = `${baseName}.txt`;
   document.body.appendChild(link);
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-});
+  setStatus('Скачано');
+}
 
+fileInput.addEventListener('change', handleFileSelect);
 sourceText.addEventListener('input', () => {
   updateStats(sourceText.value);
   outputText.value = sourceText.value;
+  setStatus('Редактирование');
 });
 
-fileInput.addEventListener('change', handleFileInput);
-updateStats('');
+document.querySelectorAll('[data-action]').forEach((button) => {
+  button.addEventListener('click', () => applyTransformation(button.dataset.action));
+});
 
+copyBtn.addEventListener('click', copyOutput);
+resetBtn.addEventListener('click', resetAll);
+downloadBtn.addEventListener('click', downloadOutput);
+
+updateStats('');
+resetAll();

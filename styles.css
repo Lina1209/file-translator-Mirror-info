@@ -1,13 +1,18 @@
 :root {
-  --bg: #0b1020;
-  --panel: #121b2d;
-  --panel-alt: #1a2740;
-  --primary: #7c9cff;
-  --accent: #54d6c5;
-  --text: #ebf0ff;
-  --muted: #a9b5d1;
+  --bg: #08111d;
+  --bg-2: #0d1727;
+  --panel: rgba(18, 28, 43, 0.82);
+  --panel-strong: rgba(24, 38, 58, 0.95);
+  --panel-alt: rgba(15, 22, 34, 0.9);
+  --primary: #7c9dff;
+  --primary-strong: #5d7ef5;
+  --accent: #4ee0c7;
+  --text: #edf4ff;
+  --muted: #a9b8d6;
   --border: rgba(255, 255, 255, 0.08);
-  --shadow: rgba(0, 0, 0, 0.2);
+  --shadow: rgba(9, 18, 31, 0.56);
+  --success: #6ce8a7;
+  --warning: #ffd166;
 }
 
 * {
@@ -18,24 +23,31 @@ html, body {
   margin: 0;
   min-height: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0b1020, #101827 42%, #172338);
+  background:
+    radial-gradient(circle at top left, rgba(124, 157, 255, 0.22), transparent 30%),
+    linear-gradient(135deg, var(--bg), var(--bg-2) 48%, #101d32);
   color: var(--text);
 }
 
 body {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 16px;
+  padding: 26px 16px;
+}
+
+button, input, textarea {
+  font: inherit;
 }
 
 .app-shell {
   width: min(1200px, 100%);
-  background: rgba(18, 27, 45, 0.86);
+  background: rgba(15, 22, 34, 0.75);
   border: 1px solid var(--border);
-  border-radius: 24px;
-  box-shadow: 0 22px 48px var(--shadow);
-  backdrop-filter: blur(8px);
+  border-radius: 26px;
+  box-shadow: 0 30px 55px var(--shadow);
+  backdrop-filter: blur(10px);
 }
 
 .topbar {
@@ -46,141 +58,213 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #07111d;
+  font-weight: 800;
+}
+
 .eyebrow {
-  margin: 0 0 6px;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  margin: 0 0 4px;
   color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.7rem;
 }
 
 h1, h2 {
   margin: 0;
 }
 
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
 .layout {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 22px;
+  padding: 22px;
 }
 
 .panel {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
+  border-radius: 22px;
+  padding: 18px;
 }
 
-.field-group {
+.panel-head, .info-head {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 18px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-label {
-  font-weight: 600;
+.upload-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  cursor: pointer;
   color: var(--muted);
 }
 
-input[type="file"],
-textarea,
-button {
-  font: inherit;
-}
-
-input[type="file"] {
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--panel-alt);
-  color: var(--text);
-  padding: 14px 16px;
+.upload-field input {
+  max-width: 220px;
 }
 
 textarea {
   width: 100%;
-  resize: vertical;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--panel-alt);
   color: var(--text);
-  padding: 14px 16px;
-  line-height: 1.5;
+  padding: 16px 16px;
+  resize: vertical;
+  min-height: 300px;
+  line-height: 1.6;
 }
 
 textarea::placeholder {
-  color: rgba(235, 240, 255, 0.44);
+  color: rgba(237, 244, 255, 0.45);
 }
 
-.action-row {
+.output-box {
+  margin-top: 18px;
+}
+
+.output-box label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.toolbar {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 18px;
 }
 
 button {
-  border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text);
   border-radius: 12px;
   padding: 10px 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
 button:hover {
   transform: translateY(-1px);
-  border-color: rgba(124, 156, 255, 0.45);
+  border-color: rgba(124, 157, 255, 0.5);
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--primary), #5b7dff);
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
   color: white;
+  border-color: transparent;
+}
+
+.secondary-btn {
+  background: rgba(78, 224, 199, 0.08);
+  border-color: rgba(78, 224, 199, 0.35);
 }
 
 .ghost-btn {
   background: transparent;
-  border-color: var(--border);
 }
 
-.stat-grid {
+.status-pill {
+  background: rgba(108, 232, 167, 0.12);
+  color: var(--success);
+  border: 1px solid rgba(108, 232, 167, 0.28);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+
+.stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin: 18px 0 20px;
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  min-height: 90px;
 }
 
-.label {
-  font-size: 0.76rem;
+.stat-card span {
   color: var(--muted);
-  text-transform: uppercase;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.single-row {
-  margin-top: 12px;
+.stat-card strong {
+  font-size: 1rem;
+  line-height: 1.25;
+  word-break: break-word;
 }
 
-@media (max-width: 840px) {
+.wide {
+  grid-column: 1 / -1;
+}
+
+.footer-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
   }
+}
 
-  .topbar {
+@media (max-width: 620px) {
+  .topbar,
+  .panel-head,
+  .info-head {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .upload-field {
+    width: 100%;
+    justify-content: space-between;
   }
 }

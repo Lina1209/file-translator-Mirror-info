@@ -3,75 +3,97 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Translator / Mirror Info</title>
+    <title>Mirror Info | File Translator</title>
+    <meta
+      name="description"
+      content="Mirror Info File Translator — processing, mirroring, and export of text files."
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Mirror Info</p>
-          <h1>File Translator</h1>
+        <div class="brand-wrap">
+          <span class="brand-mark">MI</span>
+          <div>
+            <p class="eyebrow">Mirror Info</p>
+            <h1>File Translator</h1>
+          </div>
         </div>
-        <button id="resetButton" class="ghost-btn" type="button">Сброс</button>
+
+        <div class="header-actions">
+          <button id="copyBtn" class="secondary-btn" type="button">Копировать</button>
+          <button id="resetBtn" class="ghost-btn" type="button">Сброс</button>
+        </div>
       </header>
 
       <main class="layout">
-        <section class="panel controls-panel">
-          <div class="field-group">
-            <label for="fileInput">Загрузить файл</label>
-            <input id="fileInput" type="file" accept=".txt,.md,.json,.csv,.html,.xml,.js,.css" />
+        <section class="panel input-panel">
+          <div class="panel-head">
+            <h2>Исходный текст</h2>
+            <label class="upload-field" for="fileInput">
+              <span>Загрузить файл</span>
+              <input id="fileInput" type="file" accept=".txt,.md,.json,.csv,.html,.xml,.js,.css" />
+            </label>
           </div>
 
-          <div class="field-group">
-            <label for="sourceText">Текст</label>
-            <textarea id="sourceText" placeholder="Введите текст или загрузите файл..." rows="14"></textarea>
-          </div>
+          <textarea id="sourceText" placeholder="Введите текст или загрузите файл..." spellcheck="false"></textarea>
 
-          <div class="action-row">
-            <button id="mirrorBtn" class="primary-btn" type="button">Зеркально</button>
-            <button id="upperBtn" type="button">Верхний регистр</button>
-            <button id="lowerBtn" type="button">Нижний регистр</button>
-            <button id="trimBtn" type="button">Убрать лишние пробелы</button>
+          <div class="toolbar">
+            <button data-action="mirror" class="primary-btn" type="button">Зеркально</button>
+            <button data-action="reverseWords" type="button">Слова наоборот</button>
+            <button data-action="upper" type="button">Верхний регистр</button>
+            <button data-action="lower" type="button">Нижний регистр</button>
+            <button data-action="title" type="button">Title Case</button>
+            <button data-action="trim" type="button">Без пробелов</button>
+            <button data-action="sort" type="button">Сортировать строки</button>
+            <button data-action="unique" type="button">Убрать дубликаты</button>
           </div>
         </section>
 
         <aside class="panel info-panel">
-          <h2>Информация</h2>
+          <div class="info-head">
+            <h2>Информация</h2>
+            <span id="statusPill" class="status-pill">Готово</span>
+          </div>
 
-          <div class="stat-grid">
+          <div class="stats-grid">
             <div class="stat-card">
-              <span class="label">Имя</span>
+              <span>Файл</span>
               <strong id="fileName">—</strong>
             </div>
             <div class="stat-card">
-              <span class="label">Тип</span>
+              <span>Тип</span>
               <strong id="mimeType">—</strong>
             </div>
             <div class="stat-card">
-              <span class="label">Размер</span>
+              <span>Размер</span>
               <strong id="fileSize">—</strong>
             </div>
             <div class="stat-card">
-              <span class="label">Расширение</span>
+              <span>Расширение</span>
               <strong id="fileExt">—</strong>
             </div>
             <div class="stat-card">
-              <span class="label">Символы</span>
+              <span>Символы</span>
               <strong id="charCount">0</strong>
             </div>
             <div class="stat-card">
-              <span class="label">Слова</span>
+              <span>Слова</span>
               <strong id="wordCount">0</strong>
+            </div>
+            <div class="stat-card wide">
+              <span>Строки</span>
+              <strong id="lineCount">0</strong>
             </div>
           </div>
 
-          <div class="field-group compact">
+          <div class="output-box">
             <label for="outputText">Результат</label>
-            <textarea id="outputText" rows="12" placeholder="Результат появится здесь..."></textarea>
+            <textarea id="outputText" placeholder="Результат появится здесь..." spellcheck="false"></textarea>
           </div>
 
-          <div class="action-row single-row">
+          <div class="footer-actions">
             <button id="downloadBtn" class="primary-btn" type="button">Скачать .txt</button>
           </div>
         </aside>
