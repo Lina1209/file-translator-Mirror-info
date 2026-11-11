@@ -1,0 +1,26 @@
+{
+  "name": "Mirror-info — Транслятор и Читалка",
+  "short_name": "Mirror-info",
+  "description": "Перевод документов и онлайн-читалка книг. ©Lina_Winter · Mirror-info",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f9f6f1",
+  "theme_color": "#8ba888",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
