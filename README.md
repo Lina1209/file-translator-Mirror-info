@@ -1,62 +1,23 @@
-# Транслятор файлов
+# File Translator / Mirror Info
 
-Онлайн-сервис перевода документов Word, PDF, EPUB, FB2, текстовых файлов и сканов.
+Small static web app for working with text files: upload a file, view its metadata, mirror the text, and download the result.
 
-**Сайт:** после включения GitHub Pages будет доступен по адресу  
-`https://Lina1209.github.io/file-translator/`
+## Features
+- upload `.txt`, `.md`, `.json`, `.csv` and other text-based files
+- display file name, size, type, extension, and text stats
+- quick text actions: mirror, uppercase, lowercase, remove extra spaces
+- download processed content in `.txt` format
 
-## Возможности
+## Run locally
+Open `index.html` in a browser, or serve the folder with any static file server:
 
-- Перевод текста, файлов и фото/сканов
-- Калькулятор стоимости (RUB, KZT, USD, EUR)
-- Форма заявки на перевод
-- Личный кабинет (история заявок)
-- Админ-панель (пароль: `Lina1209`)
-
-## Как запустить на GitHub Pages
-
-1. Создайте новый репозиторий на GitHub с названием `file-translator` (или любым другим).
-2. Загрузите **все файлы** из этой папки в корень репозитория.
-3. Перейдите в **Settings → Pages**.
-4. В разделе **Source** выберите:
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. Нажмите **Save**.
-6. Через 1–2 минуты сайт будет доступен по адресу:
-   `https://ВАШ_ЛОГИН.github.io/file-translator/`
-
-## Структура проекта
-
-```
-file-translator/
-├── index.html          — главная страница
-├── style.css           — стили
-├── api.js              — API перевода и курсов валют
-├── translate-core.js   — логика переводчика
-├── calculator.js       — калькулятор стоимости
-├── order.js            — форма заявки
-├── app.js              — мобильное меню
-├── account.html        — личный кабинет
-├── admin.html          — админ-панель
-├── admin.js            — логика админки
-└── README.md
+```bash
+python -m http.server 8000
 ```
 
-## Важно
+Then open http://localhost:8000
 
-- Перевод использует бесплатный endpoint Google Translate (может иметь лимиты).
-- Заявки и история хранятся в `localStorage` браузера (не на сервере).
-- Для продакшена рекомендуется добавить свой backend / Telegram-бота (поля уже есть в `api.js`).
-
-© Lina_Winter · Mirror - info · 2026
-
-
-## Установка как приложение (PWA)
-
-Сайт можно установить на телефон:
-
-1. Откройте сайт в Chrome / Safari
-2. Меню браузера → **«Установить приложение»** или **«На экран „Домой“»**
-3. На рабочем столе появится иконка **Mirror-info**
-
-Файлы PWA: `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`.
+## Files
+- `index.html` — application layout
+- `styles.css` — styling
+- `app.js` — logic for file handling and text operations
